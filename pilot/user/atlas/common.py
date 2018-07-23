@@ -22,7 +22,7 @@ from .utilities import get_memory_monitor_setup, get_network_monitor_setup, post
 
 from pilot.common.exception import TrfDownloadFailure, PilotException
 from pilot.util.auxiliary import get_logger
-from pilot.util.constants import UTILITY_BEFORE_PAYLOAD, UTILITY_WITH_PAYLOAD, UTILITY_AFTER_PAYLOAD,\
+from pilot.util.constants import UTILITY_BEFORE_PAYLOAD, UTILITY_WITH_PAYLOAD, UTILITY_AFTER_PAYLOAD_STARTED,\
     UTILITY_WITH_STAGEIN
 from pilot.util.container import execute
 from pilot.util.filehandling import remove, get_guid
@@ -966,7 +966,7 @@ def get_utility_commands_list(order=None):
     If the optional order parameter is set, the function should return the list of corresponding commands.
     E.g. if order=UTILITY_BEFORE_PAYLOAD, the function should return all commands that are to be executed before the
     payload. If order=UTILITY_WITH_PAYLOAD, the corresponding commands will be prepended to the payload execution
-    string. If order=UTILITY_AFTER_PAYLOAD, the commands that should be executed after the payload has been started
+    string. If order=UTILITY_AFTER_PAYLOAD_STARTED, the commands that should be executed after the payload has been started
     should be returned. If order=UTILITY_WITH_STAGEIN, the commands that should be executed parallel with stage-in will
     be returned.
 
@@ -979,7 +979,7 @@ def get_utility_commands_list(order=None):
             return ['Prefetcher']
         elif order == UTILITY_WITH_PAYLOAD:
             return ['NetworkMonitor']
-        elif order == UTILITY_AFTER_PAYLOAD:
+        elif order == UTILITY_AFTER_PAYLOAD_STARTED:
             return ['MemoryMonitor']
         elif order == UTILITY_WITH_STAGEIN:
             return ['Benchmark']
@@ -1021,10 +1021,10 @@ def get_utility_command_execution_order(name):
     if name == 'NetworkMonitor':
         return UTILITY_WITH_PAYLOAD
     elif name == 'MemoryMonitor':
-        return UTILITY_AFTER_PAYLOAD
+        return UTILITY_AFTER_PAYLOAD_STARTED
     else:
         logger.warning('unknown utility name: %s' % name)
-        return UTILITY_AFTER_PAYLOAD
+        return UTILITY_AFTER_PAYLOAD_STARTED
 
 
 def post_utility_command_action(name, job):
