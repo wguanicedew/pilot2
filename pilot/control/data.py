@@ -549,6 +549,7 @@ def create_log(job, logfile, tarball_name):
 
     log.info('will create archive %s' % fullpath)
     try:
+        os.chdir(os.path.dirname(job.workdir))
         with closing(tarfile.open(name=fullpath, mode='w:gz', dereference=True)) as archive:
             archive.add(os.path.basename(job.workdir), recursive=True)
     except Exception as e:
@@ -557,6 +558,7 @@ def create_log(job, logfile, tarball_name):
     log.debug('renaming %s back to %s' % (job.workdir, orgworkdir))
     try:
         os.rename(job.workdir, orgworkdir)
+        os.chdir(orgworkdir)
     except Exception as e:
         log.debug('exception caught: %s' % e)
     job.workdir = orgworkdir

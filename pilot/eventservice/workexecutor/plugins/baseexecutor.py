@@ -35,7 +35,7 @@ class BaseExecutor(threading.Thread, PluginFactory):
 
         self.__stop = threading.Event()
 
-        self.__event_ranges = []
+        self.event_ranges = []
         self.__is_set_payload = False
         self.__is_retrieve_payload = False
 
@@ -119,15 +119,15 @@ class BaseExecutor(threading.Thread, PluginFactory):
 
     def get_event_ranges(self, num_event_ranges=1, queue_factor=2):
         logger.info("Getting event ranges: (num_ranges: %s)" % num_event_ranges)
-        if len(self.__event_ranges) < num_event_ranges:
+        if len(self.event_ranges) < num_event_ranges:
             ret = self.communication_manager.get_event_ranges(num_event_ranges=num_event_ranges * queue_factor, job=self.get_job())
             for event_range in ret:
-                self.__event_ranges.append(event_range)
+                self.event_ranges.append(event_range)
 
         ret = []
         for _ in range(num_event_ranges):
-            if len(self.__event_ranges) > 0:
-                event_range = self.__event_ranges.pop(0)
+            if len(self.event_ranges) > 0:
+                event_range = self.event_ranges.pop(0)
                 ret.append(event_range)
         logger.info("Received event ranges(num:%s): %s" % (len(ret), ret))
         return ret

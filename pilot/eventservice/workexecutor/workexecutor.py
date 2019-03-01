@@ -43,7 +43,8 @@ class WorkExecutor(PluginFactory):
         return self.payload
 
     def get_plugin_confs(self):
-        plugin_confs = {'class': 'pilot.eventservice.workexecutor.plugins.genericexecutor.GenericExecutor'}
+        # plugin_confs = {'class': 'pilot.eventservice.workexecutor.plugins.genericexecutor.GenericExecutor'}
+        plugin_confs = {'class': 'pilot.eventservice.workexecutor.plugins.essexecutor.ESSExecutor'}
         if self.args and 'executor_type' in self.args.keys():
             if self.args['executor_type'] == 'base':
                 plugin_confs = {'class': 'pilot.eventservice.workexecutor.plugins.baseexecutor.BaseExecutor'}
